@@ -1,0 +1,38 @@
+[
+  {
+    "featureType": "poi.park",
+    "elementType": "geometry.fill",
+    "stylers": [
+      {
+        "color": "#84e1ac"
+      }
+    ]
+  },
+  {
+    "featureType": "poi.school",
+    "elementType": "geometry.fill",
+    "stylers": [
+      {
+        "color": "#448088"
+      }
+    ]
+  },
+  {
+    "featureType": "poi.sports_complex",
+    "elementType": "geometry.fill",
+    "stylers": [
+      {
+        "color": "#f024ff"
+      }
+    ]
+  },
+  {
+    "featureType": "road.highway",
+    "elementType": "geometry.fill",
+    "stylers": [
+      {
+        "color": "#d87f3b"
+      }
+    ]
+  }
+]

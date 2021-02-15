@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "88241495591",
+    "project_id": "jeyla-login",
+    "storage_bucket": "jeyla-login.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:88241495591:android:ebd9471b37c77440dab802",
+        "android_client_info": {
+          "package_name": "com.udacity.project4"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "88241495591-f6t27p7hvcgujgmb588eta68pa6s8mlq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.udacity.project4",
+            "certificate_hash": "b9706bbbd71691e7083d2784bbbcdffa20facb62"
+          }
+        },
+        {
+          "client_id": "88241495591-k3b92922ovhu2u1qpq0jmlf0aic3b7c3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD-fG16qhOsKjPre61uQe80keCK_NWV_mI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "88241495591-k3b92922ovhu2u1qpq0jmlf0aic3b7c3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
