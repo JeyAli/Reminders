@@ -60,10 +60,10 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
     private var locationPermissionGranted = false
 
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         binding =
-                DataBindingUtil.inflate(inflater, R.layout.fragment_select_location, container, false)
+            DataBindingUtil.inflate(inflater, R.layout.fragment_select_location, container, false)
 
         binding.viewModel = _viewModel
         binding.lifecycleOwner = this
@@ -73,7 +73,7 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
 
         // Construct a FusedLocationProviderClient.
         fusedLocationProviderClient =
-                LocationServices.getFusedLocationProviderClient(requireActivity())
+            LocationServices.getFusedLocationProviderClient(requireActivity())
 
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment?.getMapAsync(this)
@@ -114,9 +114,9 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
     }
 
     override fun onRequestPermissionsResult(
-            requestCode: Int,
-            permissions: Array<String>,
-            grantResults: IntArray
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
@@ -126,7 +126,7 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
 
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.isNotEmpty() &&
-                        grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     locationPermissionGranted = true
                     Timber.d("Permission Granted")
                     checkDeviceLocationSettingsAndStartGeofence()
@@ -139,14 +139,14 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
 
     override fun onStart() {
         super.onStart()
-        Log.i("onStart", "foregroundAndBackgroundLocationPermission")
+        Timber.i("foregroundAndBackgroundLocationPermission")
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        // Log.e("onActivityResult", "ResultCode is $resultCode and requestCode is $requestCode")
+        Timber.e("ResultCode is $resultCode and requestCode is $requestCode")
         if (requestCode == REQUEST_TURN_DEVICE_LOCATION_ON) {
-            //   Log.e("onActivityResult", "onActivityResult REQUEST_TURN_DEVICE_LOCATION_ON ")
+            Timber.e( "onActivityResult REQUEST_TURN_DEVICE_LOCATION_ON ")
             checkDeviceLocationSettingsAndStartGeofence(false)
         }
     }
@@ -154,19 +154,19 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
     @TargetApi(29)
     private fun foregroundAndBackgroundLocationPermissionApproved(): Boolean {
         val foregroundLocationApproved =
-                (PackageManager.PERMISSION_GRANTED == ActivityCompat.checkSelfPermission(
-                        requireContext(), Manifest.permission.ACCESS_FINE_LOCATION
-                ))
+            (PackageManager.PERMISSION_GRANTED == ActivityCompat.checkSelfPermission(
+                requireContext(), Manifest.permission.ACCESS_FINE_LOCATION
+            ))
         val backgroundLocationApproved =
-                if (runningQOrLater) {
+            if (runningQOrLater) {
 
-                    PackageManager.PERMISSION_GRANTED == ActivityCompat.checkSelfPermission(
-                            requireContext(),
-                            Manifest.permission.ACCESS_BACKGROUND_LOCATION
-                    )
-                } else {
-                    true
-                }
+                PackageManager.PERMISSION_GRANTED == ActivityCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.ACCESS_BACKGROUND_LOCATION
+                )
+            } else {
+                true
+            }
         return foregroundLocationApproved && backgroundLocationApproved
     }
 
@@ -178,36 +178,31 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
         setMapStyle(map)
         foregroundAndBackgroundLocationPermission()
         getDeviceLocation()
-
-      /*  map.setOnMapClickListener { poi -> // Clears the previously touched position
-            map.clear();
-            // Animating to the touched position
-            map.animateCamera(CameraUpdateFactory.newLatLngZoom(poi, Companion.ZOOM_LEVEL.toFloat()));
-
-            map.addMarker(MarkerOptions().position(poi))
-        }*/
     }
 
     private fun setMapClick(map: GoogleMap) {
         map.setOnMapClickListener {
-          //  binding.saveLocation.visibility = View.VISIBLE
             binding.saveLocation.setOnClickListener { view ->
                 _viewModel.latitude.value = it.latitude
                 _viewModel.longitude.value = it.longitude
                 _viewModel.reminderSelectedLocationStr.value = "Custom location chosen"
                 findNavController().popBackStack()
             }
-                map.clear();
-                // Animating to the touched position
-                map.animateCamera(CameraUpdateFactory.newLatLngZoom(it, Companion.ZOOM_LEVEL.toFloat()));
+            map.clear();
+            // Animating to the touched position
+            map.animateCamera(
+                CameraUpdateFactory.newLatLngZoom(
+                    it,
+                    Companion.ZOOM_LEVEL.toFloat()
+                )
+            );
 
-                map.addMarker(MarkerOptions().position(it))
-            }
+            map.addMarker(MarkerOptions().position(it))
         }
+    }
 
     private fun setPoiClick(map: GoogleMap) {
         map.setOnPoiClickListener { poi ->
-           // binding.saveLocation.visibility = View.VISIBLE
             binding.saveLocation.setOnClickListener {
                 onLocationSelected(poi)
             }
@@ -215,9 +210,9 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
             map.clear();
 
             val poiMarker = map.addMarker(
-                    MarkerOptions()
-                            .position(poi.latLng)
-                            .title(poi.name)
+                MarkerOptions()
+                    .position(poi.latLng)
+                    .title(poi.name)
             )
             poiMarker.showInfoWindow()
         }
@@ -225,12 +220,12 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
 
     @TargetApi(29)
     private fun foregroundAndBackgroundLocationPermission() {
-        //Log.e("foregroundBackground", "foregroundAndBackgroundLocationPermissionApproved is ${foregroundAndBackgroundLocationPermissionApproved()}")
+        Timber.e("foregroundAndBackgroundLocationPermissionApproved is ${foregroundAndBackgroundLocationPermissionApproved()}")
         if (foregroundAndBackgroundLocationPermissionApproved()) {
             checkDeviceLocationSettingsAndStartGeofence()
         }
         var permissionsArray = arrayOf(Manifest.permission.ACCESS_FINE_LOCATION)
-        //Log.e("runningQOrLater", "runningQOrLater is $runningQOrLater")
+        Timber.e("runningQOrLater is $runningQOrLater")
         val resultCode = when {
             runningQOrLater -> {
                 permissionsArray += Manifest.permission.ACCESS_BACKGROUND_LOCATION
@@ -239,11 +234,10 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
             else ->
                 REQUEST_FOREGROUND_ONLY_PERMISSIONS_REQUEST_CODE
         }
-        // Log.e("resultCode","resultCode is $resultCode")
-        ActivityCompat.requestPermissions(
-                requireActivity(),
-                permissionsArray,
-                resultCode
+        Timber.e("resultCode is $resultCode")
+        requestPermissions(
+            permissionsArray,
+            resultCode
         )
     }
 
@@ -255,30 +249,30 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
         val builder = LocationSettingsRequest.Builder().addLocationRequest(locationRequest)
         val settingsClient = LocationServices.getSettingsClient(requireActivity())
         val locationSettingsResponseTask =
-                settingsClient.checkLocationSettings(builder.build())
+            settingsClient.checkLocationSettings(builder.build())
         locationSettingsResponseTask.addOnFailureListener { exception ->
             if (exception is ResolvableApiException && resolve) {
                 try {
-                    //  Log.e("StartGeofence"," exception.startResolutionForResult")
+                    Timber.e(" exception.startResolutionForResult")
                     startIntentSenderForResult(
-                            exception.resolution.intentSender,
-                            REQUEST_TURN_DEVICE_LOCATION_ON,
-                            null,
-                            0,
-                            0,
-                            0,
-                            null
+                        exception.resolution.intentSender,
+                        REQUEST_TURN_DEVICE_LOCATION_ON,
+                        null,
+                        0,
+                        0,
+                        0,
+                        null
                     )
                 } catch (sendEx: IntentSender.SendIntentException) {
-                    //   Log.e("StartGeofence","Error getting location settings resolution: ${sendEx.message}")
+                    Timber.e("Error getting location settings resolution: ${sendEx.message}")
                 }
             } else {
-                // Log.e("StartGeofence","Error getting location settings resolution: showing snackbar")
+                Timber.e("Error getting location settings resolution: showing snackbar")
                 Snackbar.make(
-                        binding.constraintLayout,
-                        R.string.location_required_error, Snackbar.LENGTH_INDEFINITE
+                    binding.constraintLayout,
+                    R.string.location_required_error, Snackbar.LENGTH_INDEFINITE
                 ).setAction(android.R.string.ok) {
-                    //   Log.e("StartGeofence","setAction oK")
+                    Timber.e("setAction oK")
                     checkDeviceLocationSettingsAndStartGeofence()
                 }.show()
             }
@@ -296,32 +290,31 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
             if (location != null) {
                 val userLatLng = LatLng(location.latitude, location.longitude)
                 map.moveCamera(
-                        CameraUpdateFactory.newLatLngZoom(
-                                userLatLng,
-                                ZOOM_LEVEL.toFloat()
-                        )
+                    CameraUpdateFactory.newLatLngZoom(
+                        userLatLng,
+                        ZOOM_LEVEL.toFloat()
+                    )
                 )
             }
         }
     }
-
 
     private fun setMapStyle(map: GoogleMap) {
         try {
             // Customize the styling of the base map using a JSON object defined
             // in a raw resource file.
             val success = map.setMapStyle(
-                    MapStyleOptions.loadRawResourceStyle(
-                            requireContext(),
-                            R.raw.map_style
-                    )
+                MapStyleOptions.loadRawResourceStyle(
+                    requireContext(),
+                    R.raw.map_style
+                )
             )
 
             if (!success) {
-                   Log.e(TAG, "Style parsing failed.")
+                Timber.e("Style parsing failed.")
             }
         } catch (e: Resources.NotFoundException) {
-            // Log.e(TAG, "Can't find style. Error: ", e)
+            Timber.e("Can't find style")
         }
     }
 
@@ -329,7 +322,7 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
         private const val ZOOM_LEVEL = 15
         private val runningQOrLater = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
         private const val REQUEST_TURN_DEVICE_LOCATION_ON = 0
-        private const val REQUEST_CODE_LOCATION = 1
+        private const val REQUEST_CODE_LOCATION = 2
         private const val REQUEST_FOREGROUND_AND_BACKGROUND_PERMISSION_RESULT_CODE = 2
         private const val REQUEST_FOREGROUND_ONLY_PERMISSIONS_REQUEST_CODE = 3
     }

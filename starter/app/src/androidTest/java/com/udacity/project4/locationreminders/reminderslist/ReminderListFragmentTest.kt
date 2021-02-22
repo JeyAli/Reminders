@@ -20,6 +20,7 @@ import androidx.test.filters.MediumTest
 import androidx.test.rule.ActivityTestRule
 import com.udacity.project4.MainAndroidTestCoroutineRule
 import com.udacity.project4.R
+import com.udacity.project4.authentication.LoginViewModel
 import com.udacity.project4.locationreminders.data.ReminderDataSource
 import com.udacity.project4.locationreminders.data.dto.ReminderDTO
 import com.udacity.project4.locationreminders.data.local.LocalDB
@@ -77,6 +78,11 @@ class ReminderListFragmentTest : AutoCloseKoinTest() {
                     get() as ReminderDataSource
                 )
             }
+
+            viewModel {
+                LoginViewModel(
+                )
+            }
             single { RemindersLocalRepository(get()) as ReminderDataSource }
             single { LocalDB.createRemindersDao(appContext) }
         }
@@ -109,9 +115,9 @@ class ReminderListFragmentTest : AutoCloseKoinTest() {
         scenario.onFragment {
             Navigation.setViewNavController(it.view!!, navController)
         }
-        onView(withText(newReminder.title)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
-        onView(withText(newReminder.description)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
-        onView(withText(newReminder.location)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+        onView(withText(newReminder.title)).check(matches(isDisplayed()))
+        onView(withText(newReminder.description)).check(matches(isDisplayed()))
+        onView(withText(newReminder.location)).check(matches(isDisplayed()))
     }
 
     @Test

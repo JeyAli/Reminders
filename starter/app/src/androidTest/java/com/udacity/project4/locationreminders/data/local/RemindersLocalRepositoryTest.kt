@@ -107,7 +107,6 @@ class RemindersLocalRepositoryTest {
         )
 
         repository.saveReminder(newReminder)
-        repository.deleteAllReminders()
         val remindersResult = repository.getReminders() as Result.Success<List<ReminderDTO>>
         val loadedReminder = remindersResult.data
 

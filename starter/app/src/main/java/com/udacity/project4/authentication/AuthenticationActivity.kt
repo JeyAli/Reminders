@@ -38,6 +38,7 @@ class AuthenticationActivity : AppCompatActivity() {
             if (authenticationState == LoginViewModel.AuthenticationState.AUTHENTICATED) {
                 binding.authButton.setOnClickListener {
                     startRemindersActivity()
+                    finish()
                     Timber.i("User is Authenticated")
                 }
 
@@ -77,6 +78,7 @@ class AuthenticationActivity : AppCompatActivity() {
             if (resultCode == Activity.RESULT_OK) {
                  Timber.i( "Successfully Signed in")
                 startRemindersActivity()
+                finish()
             } else {
                 if (response == null) {
                     Timber.i("Back button pressed")
